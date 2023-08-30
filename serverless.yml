@@ -1,0 +1,173 @@
+# For full config options, check the docs:
+#    docs.serverless.com
+
+service: outlet-backend
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  profile: lester_marroquin-Admin
+  stage: ${opt:stage}
+  region: ${opt:region}
+  memorySize: 1024
+  timeout: 30
+  environment:
+    ENV: ${file(./src/config/${opt:state, 'dev'}.json):ENV}
+    DB_USER: ${file(./src/config/${opt:state, 'dev'}.json):DB_USER}
+    DB_PORT: ${file(./src/config/${opt:state, 'dev'}.json):DB_PORT}
+    DB_PASSWORD: ${file(./src/config/${opt:state, 'dev'}.json):DB_PASSWORD}
+    DB_DATABASE: ${file(./src/config/${opt:state, 'dev'}.json):DB_DATABASE}
+    DB_HOST: ${file(./src/config/${opt:state, 'dev'}.json):DB_HOST}  
+
+plugins:
+  - serverless-offline
+  - serverless-prune-plugin
+
+custom:
+  prune:
+    automatic: true
+    number: 2
+
+# -*-*-*-* Persona *-*-*-*-
+
+functions:
+  obtenerPersona:
+    handler: src/handlers/persona-handler.obtenerTodo
+    events:
+      - http:
+          path: persona
+          method: get
+          
+  obtenerUnaPersona:
+    handler: src/handlers/persona-handler.obtenerUno
+    events:
+      - http:
+          path: persona/{id}
+          method: get
+
+  crearPersona:
+    handler: src/handlers/persona-handler.crear
+    events:
+      - http:
+          path: persona
+          method: post
+
+  actualizarPersona:
+    handler: src/handlers/persona-handler.actualizar
+    events:
+      - http:
+          path: persona/{id}
+          method: put
+
+# -*-*-*-* Empleado *-*-*-*-
+
+  obtenerEmpleados:
+    handler: src/handlers/empleado-handler.obtenerTodo
+    events:
+      - http:
+          path: empleado
+          method: get
+          
+  obtenerUnEmpleado:
+    handler: src/handlers/empleado-handler.obtenerUno
+    events:
+      - http:
+          path: empleado/{id}
+          method: get
+
+  crearEmpleado:
+    handler: src/handlers/empleado-handler.crear
+    events:
+      - http:
+          path: empleado
+          method: post
+
+  actualizarEmpleado:
+    handler: src/handlers/empleado-handler.actualizar
+    events:
+      - http:
+          path: empleado/{id}
+          method: put
+
+  eliminarEmpleado:
+    handler: src/handlers/empleado-handler.eliminar
+    events:
+      - http:
+          path: empleado/{id}
+          method: delete
+
+# -*-*-*-* Usuario *-*-*-*-
+
+  obtenerUsuarios:
+    handler: src/handlers/usuario-handler.obtenerTodo
+    events:
+      - http:
+          path: usuario
+          method: get
+          
+  obtenerUnUsuario:
+    handler: src/handlers/usuario-handler.obtenerUno
+    events:
+      - http:
+          path: usuario/{id}
+          method: get
+
+  crearUsuario:
+    handler: src/handlers/usuario-handler.crear
+    events:
+      - http:
+          path: usuario
+          method: post
+
+  actualizarUsuario:
+    handler: src/handlers/usuario-handler.actualizar
+    events:
+      - http:
+          path: usuario/{id}
+          method: put
+
+  eliminarUsuario:
+    handler: src/handlers/usuario-handler.eliminar
+    events:
+      - http:
+          path: usuario/{id}
+          method: delete
+  
+# -*-*-*-* Proveedor *-*-*-*-
+
+  obtenerProveedor:
+    handler: src/handlers/proveedor-handler.obtenerTodo
+    events:
+      - http:
+          path: proveedor
+          method: get
+          
+  obtenerUnProveedor:
+    handler: src/handlers/proveedor-handler.obtenerUno
+    events:
+      - http:
+          path: proveedor/{id}
+          method: get
+
+  crearProveedor:
+    handler: src/handlers/proveedor-handler.crear
+    events:
+      - http:
+          path: proveedor
+          method: post
+
+  actualizarProveedor:
+    handler: src/handlers/proveedor-handler.actualizar
+    events:
+      - http:
+          path: proveedor/{id}
+          method: put
+
+  eliminarProveedor:
+    handler: src/handlers/proveedor-handler.eliminar
+    events:
+      - http:
+          path: proveedor/{id}
+          method: delete
