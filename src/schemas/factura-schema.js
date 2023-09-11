@@ -1,4 +1,5 @@
 const Joi = require('joi')
+
 const validarFecha = (value, helpers) => {
     const regex = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -22,15 +23,15 @@ const validarFecha = (value, helpers) => {
 }
 
 const schema = Joi.object({
-    Nombre: Joi.string().min(2).max(100).required(),
-    Apellido: Joi.string().min(2).max(100).required(),
-    FechaNacimiento: Joi.string().custom(validarFecha, 'FechaNacimiento').required(),
-    Sexo: Joi.valid(0,1).required(), // 0 = mujer | 1 = hombre
-    NIT: Joi.string().max(15).allow(null),
-    DPI: Joi.string().max(15).allow(null),
-    Telefono: Joi.string().min(8).max(10).allow(null),
-    Direccion: Joi.string().max(500),
-    CodMunicipio: Joi.number().integer().required()
+    NumeroFactura: Joi.string().max(45).required(),
+    SerieFactura: Joi.string().max(45).required(),
+    CodEmpleado: Joi.number().integer().required(),
+    UsuarioID: Joi.string().max(100).required(),
+    FechaEmision: Joi.string().custom(validarFecha, 'FechaEmision').required(),
+    FechaAnulacion: Joi.string().custom(validarFecha, 'FechaAnulacion').required(),
+    ComentarioAnulacion: Joi.string().max(300).allow(''),
+    TotalFactura: Joi.number().precision(1).required(),
+    CodSucursal: Joi.number().integer().required()
 })  
 
 const validar = (data) => {

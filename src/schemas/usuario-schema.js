@@ -6,7 +6,7 @@ const validarFecha = (value, helpers) => {
         return helpers.error('string.pattern.base', {value});
     }
 
-    const date = value.split("-");
+    const date = value.split('-');
     const year = parseInt(date[0]);
     const month = parseInt(date[1]);
     const day = parseInt(date[2]);
@@ -15,7 +15,7 @@ const validarFecha = (value, helpers) => {
     const yearMinimo = yearActual - 100;
 
     if (year < yearMinimo || year > yearActual || month < 1 || month > 12 || day < 1 || day > 31) {
-      return helpers.error("any.invalid");
+      return helpers.error('any.invalid');
     }
     
     return value;
@@ -25,7 +25,7 @@ const schema = Joi.object({
     UsuarioID: Joi.string().required(),
     CodPersona: Joi.number().integer().required(),
     CodRol: Joi.number().integer().required(),
-    FechaRegistro: Joi.string().custom(validarFecha, "FechaNacimiento").required(),
+    FechaRegistro: Joi.string().custom(validarFecha, 'FechaNacimiento').required(),
     ClaveUsuario: Joi.string().max(256).required(),
     CodEstado: Joi.number().integer().required()
 })  

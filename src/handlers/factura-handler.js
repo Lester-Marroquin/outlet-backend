@@ -1,6 +1,6 @@
 'use strict';
 const { parseResponse } = require('../helpers/response')
-const controller = require('../controllers/persona-controller');
+const controller = require('../controllers/factura-controller');
 // const { validarJWT } = require('../helpers/validar-jwt')
 
 const obtenerTodo = async () => {
@@ -13,7 +13,7 @@ const obtenerTodo = async () => {
 const obtenerUno = async (event) => {
   // const unauthResponse = await validarJWT(event);
   // if (unauthResponse) return parseResponse(unauthResponse);
-  const response = await controller.obtenerUno(event.pathParameters.id);
+  const response = await controller.obtenerUno(event.body);
     return parseResponse(response);
 };
 
@@ -28,7 +28,7 @@ const actualizar = async (event) => {
   // const unauthResponse = await validarJWT(event);
   // if (unauthResponse) return parseResponse(unauthResponse);
 
-  const response = await controller.actualizar(JSON.parse(event.body), event.pathParameters.id);
+  const response = await controller.actualizar(JSON.parse(event.body));
   return parseResponse(response);
 };
 

@@ -32,7 +32,12 @@ const crear = async (body) => {
        
     const validacion = validar(body);
     if (validacion) {
-      return responseFail({message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
+      return responseFail({message: 'Los datos no son validos para crear una persona', statusCode: StatusCodes.BAD_REQUEST})
+    }
+
+    const consulta = await query.consultarExiste(body);
+    if (consulta) {
+      return responseFail({message: `La persona ya se encuentra creada con el ID: ${consulta.CodPersona}`, statusCode: StatusCodes.CONFLICT})
     }
 
     const result = await query.crear(body);
@@ -51,7 +56,7 @@ const actualizar = async (body, id) => {
 
     const validacion = validar(body);
     if (validacion) {
-      return responseFail({message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
+      return responseFail({message: 'Los datos no son validos para actualizar la persona', statusCode: StatusCodes.BAD_REQUEST})
     }
 
     const result = await query.actualizar(body, id);

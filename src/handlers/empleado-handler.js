@@ -1,6 +1,8 @@
 'use strict';
 const { parseResponse } = require('../helpers/response')
-const controller = require('../controllers/proveedor-controller');
+const controllerE = require('../controllers/empleado-controller');
+const controllerP = require('../controllers/persona-controller');
+const controllerU = require('../controllers/usuario-controller');
 // const { validarJWT } = require('../helpers/validar-jwt')
 
 const obtenerTodo = async () => {
@@ -20,8 +22,36 @@ const obtenerUno = async (event) => {
 const crear = async (event) => {
   // const unauthResponse = await validarJWT(event);
   // if (unauthResponse) return parseResponse(unauthResponse);
-  const response = await controller.crear(JSON.parse(event.body));
-  return parseResponse(response);
+  const data = JSON.parse(event.body)
+  
+  // Guardamos los datos de persona
+  const responseP = await controllerP.crear(data.Persona);
+  
+  if (responseP.data == null) {
+    return parseResponse(responseP);
+  }
+
+  // Asignamos el CodPersona creado a la data para Empleado
+  data.Empleado.CodPersona = responseP.data.CodPersona 
+
+  // Creamos el empleado 
+  const responseE = await controllerE.crear(data.Empleado);
+
+  if (responseE.data == null) {
+    return parseResponse(responseE);
+  }
+
+  // Asignamos el CodPersona creado a la data para Usuario
+  data.Usuario.CodPersona = responseP.data.CodPersona
+  
+  // Creamos el usuario
+  const responseU = await controllerU.crear(data.Usuario);
+
+  if (responseU.data == null) {
+    return parseResponse(responseU);
+  }
+
+  return parseResponse(responseU);
 };
 
 const actualizar = async (event) => {

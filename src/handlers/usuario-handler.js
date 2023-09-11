@@ -1,8 +1,9 @@
-"use strict";
-const { parseResponse } = require("../helpers/response")
-const controller = require("../controllers/usuario-controller");
-const controllerP = require("../controllers/persona-controller");
-// const { validarJWT } = require("../helpers/validar-jwt")
+'use strict';
+const { parseResponse } = require('../helpers/response')
+// const { responseFail } = require('../helpers/response')
+const controller = require('../controllers/usuario-controller');
+const controllerP = require('../controllers/persona-controller');
+// const { validarJWT } = require('../helpers/validar-jwt')
 
 const obtenerTodo = async () => {
   // const unauthResponse = await validarJWT(event);
@@ -23,9 +24,13 @@ const crear = async (event) => {
   // if (unauthResponse) return parseResponse(unauthResponse);
   const data = JSON.parse(event.body)
   const responseP = await controllerP.crear(data.Persona);
-  
+ 
+  if (responseP.data == null) {
+    return parseResponse(responseP);
+  }
+
   data.Usuario.CodPersona = responseP.data.CodPersona
-  
+
   const response = await controller.crear(data.Usuario);
   return parseResponse(response);
 };

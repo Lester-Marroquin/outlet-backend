@@ -33,7 +33,7 @@ const crear = async (body) => {
     const validacion = validar(body);
     console.log("Validación: ", validacion);
     if (validacion) {
-      return responseFail({message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
+      return responseFail({message: 'Los datos no son validos para crear el usuario', statusCode: StatusCodes.BAD_REQUEST})
     }
 
     const result = await query.crear(body);
@@ -52,7 +52,7 @@ const actualizar = async (body, id) => {
 
     const validacion = validar(body);
     if (validacion) {
-      return responseFail({message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
+      return responseFail({message: 'Los datos no son validos para actualizar el usuario', statusCode: StatusCodes.BAD_REQUEST})
     }
 
     const result = await query.actualizar(body, id);
@@ -66,22 +66,9 @@ const actualizar = async (body, id) => {
   }
 };
 
-const eliminar = async (id) => {
-  try {
-    const result = await query.eliminar(id);
-    if (!result) {
-      return responseFail({message: 'Error en la inactivación de datos', statusCode: StatusCodes.UNPROCESSABLE_ENTITY})
-    }
-    return responseSuccess({data:result, message:'Inactivación de usuario realizada con exito', statusCode: StatusCodes.OK});
-  } catch (e) {
-    return responseFail({message: e, statusCode: StatusCodes.UNPROCESSABLE_ENTITY})
-  }
-};
-
 module.exports = {
   obtenerTodo,
   obtenerUno,
   crear,
-  actualizar,
-  eliminar
+  actualizar
 };

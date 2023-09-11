@@ -1,6 +1,6 @@
 const { responseSuccess, responseFail } = require('../helpers/response')
-const { validar } = require('../schemas/proveedor-schema');
-const query  = require('../querys/proveedor-query');
+const { validar } = require('../schemas/categoria-producto-schema');
+const query  = require('../querys/categoria-producto-query');
 const { StatusCodes } = require('http-status-codes');
 
 const obtenerTodo = async () => {
@@ -29,23 +29,22 @@ const obtenerUno = async (id) => {
 
 const crear = async (body) => {
   try {
-
+       
     const validacion = validar(body);
     if (validacion) {
-      return responseFail({message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
+      return responseFail({message: 'Los datos no son validos para crear una categoria de producto', statusCode: StatusCodes.BAD_REQUEST})
     }
-    
-    //Verificar si existe
+
     const consulta = await query.consultarExiste(body);
     if (consulta) {
-      return responseFail({message: `El proveedor ya se encuentra creado con el ID: ${consulta.CodProveedor}`, statusCode: StatusCodes.CONFLICT})
+      return responseFail({message: `La Categoria de producto ya se encuentra creada con el ID: ${consulta.CodCategoriaProducto}`, statusCode: StatusCodes.CONFLICT})
     }
 
     const result = await query.crear(body);
     if (!result) {
       return responseFail({message: 'Error en la inserción de datos', statusCode: StatusCodes.NOT_FOUND})
     }
-    return responseSuccess({data: result, message: 'Proveedor creado exitosamente'});
+    return responseSuccess({data: result, message: 'Categoria de producto creada exitosamente'});
   
   } catch (e) {
     return responseFail({message: e, statusCode: StatusCodes.UNPROCESSABLE_ENTITY})
@@ -57,38 +56,23 @@ const actualizar = async (body, id) => {
 
     const validacion = validar(body);
     if (validacion) {
-      return responseFail({message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
+      return responseFail({message: 'Los datos no son validos para la actualización', statusCode: StatusCodes.BAD_REQUEST})
     }
 
     const result = await query.actualizar(body, id);
     if (!result) {
       return responseFail({message: 'Error en la actualización de datos', statusCode: StatusCodes.NOT_FOUND})
     }
-    return responseSuccess({data: result, message: 'Proveedor actualizado exitosamente'});
+    return responseSuccess({data: result, message: 'Catagoria de producto actualizada exitosamente'});
 
   } catch (e) {
     return responseFail({message: e, statusCode: StatusCodes.UNPROCESSABLE_ENTITY})
   }
 };
-
-const eliminar = async (id) => {
-  try {
-
-    const result = await query.eliminar(id);
-    if (!result) {
-      return responseFail({message: 'Error en la inactivación de datos', statusCode: StatusCodes.UNPROCESSABLE_ENTITY})
-    }
-    return responseSuccess({data:result, message:'Inactivación realizada con exito', statusCode: StatusCodes.OK});
-  } catch (e) {
-    return responseFail({message: e, statusCode: StatusCodes.UNPROCESSABLE_ENTITY})
-  }
-};
-
 
 module.exports = {
   obtenerTodo,
   obtenerUno,
   crear,
-  actualizar,
-  eliminar
+  actualizar
 };

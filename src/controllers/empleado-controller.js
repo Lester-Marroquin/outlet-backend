@@ -1,6 +1,6 @@
 const { responseSuccess, responseFail } = require('../helpers/response')
-const { validar } = require('../schemas/proveedor-schema');
-const query  = require('../querys/proveedor-query');
+const { validar } = require('../schemas/empleado-schema');
+const query  = require('../querys/empleado-query');
 const { StatusCodes } = require('http-status-codes');
 
 const obtenerTodo = async () => {
@@ -29,23 +29,18 @@ const obtenerUno = async (id) => {
 
 const crear = async (body) => {
   try {
-
+       
     const validacion = validar(body);
+    console.log("Validación: ", validacion);
     if (validacion) {
-      return responseFail({message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
-    }
-    
-    //Verificar si existe
-    const consulta = await query.consultarExiste(body);
-    if (consulta) {
-      return responseFail({message: `El proveedor ya se encuentra creado con el ID: ${consulta.CodProveedor}`, statusCode: StatusCodes.CONFLICT})
+      return responseFail({message: 'Los datos no son validos para crear al empleado', statusCode: StatusCodes.BAD_REQUEST})
     }
 
     const result = await query.crear(body);
     if (!result) {
       return responseFail({message: 'Error en la inserción de datos', statusCode: StatusCodes.NOT_FOUND})
     }
-    return responseSuccess({data: result, message: 'Proveedor creado exitosamente'});
+    return responseSuccess({data: result, message: 'Empleado creado exitosamente'});
   
   } catch (e) {
     return responseFail({message: e, statusCode: StatusCodes.UNPROCESSABLE_ENTITY})
@@ -62,33 +57,18 @@ const actualizar = async (body, id) => {
 
     const result = await query.actualizar(body, id);
     if (!result) {
-      return responseFail({message: 'Error en la actualización de datos', statusCode: StatusCodes.NOT_FOUND})
+      return responseFail({message: 'Error en la actualización de datos de datos de empleado', statusCode: StatusCodes.NOT_FOUND})
     }
-    return responseSuccess({data: result, message: 'Proveedor actualizado exitosamente'});
+    return responseSuccess({data: result, message: 'Empleado actualizado exitosamente'});
 
   } catch (e) {
     return responseFail({message: e, statusCode: StatusCodes.UNPROCESSABLE_ENTITY})
   }
 };
-
-const eliminar = async (id) => {
-  try {
-
-    const result = await query.eliminar(id);
-    if (!result) {
-      return responseFail({message: 'Error en la inactivación de datos', statusCode: StatusCodes.UNPROCESSABLE_ENTITY})
-    }
-    return responseSuccess({data:result, message:'Inactivación realizada con exito', statusCode: StatusCodes.OK});
-  } catch (e) {
-    return responseFail({message: e, statusCode: StatusCodes.UNPROCESSABLE_ENTITY})
-  }
-};
-
 
 module.exports = {
   obtenerTodo,
   obtenerUno,
   crear,
-  actualizar,
-  eliminar
+  actualizar
 };

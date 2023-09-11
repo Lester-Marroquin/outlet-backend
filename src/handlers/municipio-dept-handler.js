@@ -1,19 +1,19 @@
 'use strict';
 const { parseResponse } = require('../helpers/response')
-const controller = require('../controllers/persona-controller');
+const controller = require('../controllers/municipio-dept-controller');
 // const { validarJWT } = require('../helpers/validar-jwt')
 
-const obtenerTodo = async () => {
+const obtenerDepartamentos = async () => {
   // const unauthResponse = await validarJWT(event);
   // if (unauthResponse) return parseResponse(unauthResponse);
-  const response = await controller.obtenerTodo();
+  const response = await controller.obtenerDepartamentos();
   return parseResponse(response);
 };
 
-const obtenerUno = async (event) => {
+const obtenerMunicipios = async (event) => {
   // const unauthResponse = await validarJWT(event);
   // if (unauthResponse) return parseResponse(unauthResponse);
-  const response = await controller.obtenerUno(event.pathParameters.id);
+  const response = await controller.obtenerMunicipios(event.pathParameters.id);
     return parseResponse(response);
 };
 
@@ -33,8 +33,8 @@ const actualizar = async (event) => {
 };
 
 module.exports = {
-  obtenerTodo,
-  obtenerUno,
+  obtenerDepartamentos,
+  obtenerMunicipios,
   crear,
   actualizar
 };

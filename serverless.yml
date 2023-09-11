@@ -15,7 +15,7 @@ provider:
   timeout: 30
   environment:
     ENV: ${file(./src/config/${opt:state, 'dev'}.json):ENV}
-    DB_USER: ${file(./src/config/${opt:state, 'dev'}.json):DB_USER}
+    DB_USER: ${file(./src/config/${opt:state, 'dev'}.json):DB_USER} 
     DB_PORT: ${file(./src/config/${opt:state, 'dev'}.json):DB_PORT}
     DB_PASSWORD: ${file(./src/config/${opt:state, 'dev'}.json):DB_PASSWORD}
     DB_DATABASE: ${file(./src/config/${opt:state, 'dev'}.json):DB_DATABASE}
@@ -91,13 +91,6 @@ functions:
           path: empleado/{id}
           method: put
 
-  eliminarEmpleado:
-    handler: src/handlers/empleado-handler.eliminar
-    events:
-      - http:
-          path: empleado/{id}
-          method: delete
-
 # -*-*-*-* Usuario *-*-*-*-
 
   obtenerUsuarios:
@@ -127,14 +120,7 @@ functions:
       - http:
           path: usuario/{id}
           method: put
-
-  eliminarUsuario:
-    handler: src/handlers/usuario-handler.eliminar
-    events:
-      - http:
-          path: usuario/{id}
-          method: delete
-  
+          
 # -*-*-*-* Proveedor *-*-*-*-
 
   obtenerProveedor:
@@ -171,3 +157,335 @@ functions:
       - http:
           path: proveedor/{id}
           method: delete
+
+# -*-*-*-* Estado *-*-*-*-
+
+  obtenerEstado:
+    handler: src/handlers/estado-handler.obtenerTodo
+    events:
+      - http:
+          path: estado
+          method: get
+          
+  obtenerUnEstado:
+    handler: src/handlers/estado-handler.obtenerUno
+    events:
+      - http:
+          path: estado/{id}
+          method: get
+
+  crearEstado:
+    handler: src/handlers/estado-handler.crear
+    events:
+      - http:
+          path: estado
+          method: post
+
+  actualizarEstado:
+    handler: src/handlers/estado-handler.actualizar
+    events:
+      - http:
+          path: estado/{id}
+          method: put
+
+# -*-*-*-* Municipio-Dept *-*-*-*-
+
+  obtenerDepartamentos:
+    handler: src/handlers/municipio-dept-handler.obtenerDepartamentos
+    events:
+      - http:
+          path: municipio-dept
+          method: get
+          
+  obtenerMunicipios:
+    handler: src/handlers/municipio-dept-handler.obtenerMunicipios
+    events:
+      - http:
+          path: municipio-dept/{id}
+          method: get
+
+  crearMunicipio:
+    handler: src/handlers/municipio-dept-handler.crear
+    events:
+      - http:
+          path: municipio-dept
+          method: post
+
+  actualizarMunicipio:
+    handler: src/handlers/municipio-dept-handler.actualizar
+    events:
+      - http:
+          path: municipio-dept/{id}
+          method: put
+
+
+# -*-*-*-* Cargo *-*-*-*-
+
+  obtenerCargos:
+    handler: src/handlers/cargo-handler.obtenerTodo
+    events:
+      - http:
+          path: cargo
+          method: get
+          
+  obtenerCargo:
+    handler: src/handlers/cargo-handler.obtener
+    events:
+      - http:
+          path: cargo/{id}
+          method: get
+
+  crearCargo:
+    handler: src/handlers/cargo-handler.crear
+    events:
+      - http:
+          path: cargo
+          method: post
+
+  actualizarCargo:
+    handler: src/handlers/cargo-handler.actualizar
+    events:
+      - http:
+          path: cargo/{id}
+          method: put
+
+# -*-*-*-* Rol *-*-*-*-
+
+  obtenerRoles:
+    handler: src/handlers/rol-handler.obtenerTodo
+    events:
+      - http:
+          path: rol
+          method: get
+          
+  obtenerRol:
+    handler: src/handlers/rol-handler.obtenerUno
+    events:
+      - http:
+          path: rol/{id}
+          method: get
+
+  crearRol:
+    handler: src/handlers/rol-handler.crear
+    events:
+      - http:
+          path: rol
+          method: post
+
+  actualizarRol:
+    handler: src/handlers/rol-handler.actualizar
+    events:
+      - http:
+          path: rol/{id}
+          method: put
+
+# -*-*-*-* Detalle-Rol *-*-*-*-
+
+  obtenerDetalles-Roles:
+    handler: src/handlers/detalle-rol-handler.obtenerTodo
+    events:
+      - http:
+          path: detalle-rol
+          method: get
+          
+  obtenerDetalle-Rol:
+    handler: src/handlers/detalle-rol-handler.obtenerUno
+    events:
+      - http:
+          path: detalle-rol/{id}
+          method: get
+
+  crearDetalle-Rol:
+    handler: src/handlers/detalle-rol-handler.crear
+    events:
+      - http:
+          path: detalle-rol
+          method: post
+
+  actualizarDetalle-Rol:
+    handler: src/handlers/detalle-rol-handler.actualizar
+    events:
+      - http:
+          path: detalle-rol/{id}
+          method: put
+
+# -*-*-*-* Garantia *-*-*-*-
+
+  obtenerGarantias:
+    handler: src/handlers/garantia-handler.obtenerTodo
+    events:
+      - http:
+          path: garantia
+          method: get
+          
+  obtenerGarantia:
+    handler: src/handlers/garantia-handler.obtenerUno
+    events:
+      - http:
+          path: garantia/{id}
+          method: get
+
+  crearGarantia:
+    handler: src/handlers/garantia-handler.crear
+    events:
+      - http:
+          path: garantia
+          method: post
+
+  actualizarGarantia:
+    handler: src/handlers/garantia-handler.actualizar
+    events:
+      - http:
+          path: garantia/{id}
+          method: put
+          
+# -*-*-*-* Marca-Producto *-*-*-*-
+
+  obtenerMarcaProductos:
+    handler: src/handlers/marca-producto-handler.obtenerTodo
+    events:
+      - http:
+          path: marca-producto
+          method: get
+          
+  obtenerMarcaProducto:
+    handler: src/handlers/marca-producto-handler.obtenerUno
+    events:
+      - http:
+          path: marca-producto/{id}
+          method: get
+
+  crearMarca-Producto:
+    handler: src/handlers/marca-producto-handler.crear
+    events:
+      - http:
+          path: marca-producto
+          method: post
+
+  actualizarMarca-Producto:
+    handler: src/handlers/marca-producto-handler.actualizar
+    events:
+      - http:
+          path: marca-producto/{id}
+          method: put
+
+# -*-*-*-* Imagen-Producto *-*-*-*-
+
+  obtenerImagen-Productos:
+    handler: src/handlers/imagen-producto-handler.obtenerTodo
+    events:
+      - http:
+          path: imagen-producto
+          method: get
+          
+  obtenerImagen-Producto:
+    handler: src/handlers/imagen-producto-handler.obtenerUno
+    events:
+      - http:
+          path: imagen-producto/{id}
+          method: get
+
+  crearImagen-Producto:
+    handler: src/handlers/imagen-producto-handler.crear
+    events:
+      - http:
+          path: imagen-producto
+          method: post
+
+  actualizarImagen-Producto:
+    handler: src/handlers/imagen-producto-handler.actualizar
+    events:
+      - http:
+          path: imagen-producto/{id}
+          method: put
+
+# -*-*-*-* Producto *-*-*-*-
+
+  obtener-Productos:
+    handler: src/handlers/producto-handler.obtenerTodo
+    events:
+      - http:
+          path: producto
+          method: get
+          
+  obtener-Producto:
+    handler: src/handlers/producto-handler.obtenerUno
+    events:
+      - http:
+          path: producto/{id}
+          method: get
+
+  crear-Producto:
+    handler: src/handlers/producto-handler.crear
+    events:
+      - http:
+          path: producto
+          method: post
+
+  actualizar-Producto:
+    handler: src/handlers/producto-handler.actualizar
+    events:
+      - http:
+          path: producto/{id}
+          method: put
+
+# -*-*-*-* Categoria-Producto *-*-*-*-
+
+  obtenerCategoriaProductos:
+    handler: src/handlers/categoria-producto-handler.obtenerTodo
+    events:
+      - http:
+          path: categoria-producto
+          method: get
+          
+  obtenerCategoriaProducto:
+    handler: src/handlers/categoria-producto-handler.obtenerUno
+    events:
+      - http:
+          path: categoria-producto/{id}
+          method: get
+
+  crearCategoriaProducto:
+    handler: src/handlers/categoria-producto-handler.crear
+    events:
+      - http:
+          path: categoria-producto
+          method: post
+
+  actualizarCategoriaProducto:
+    handler: src/handlers/categoria-producto-handler.actualizar
+    events:
+      - http:
+          path: categoria-producto/{id}
+          method: put
+
+# -*-*-*-* Sucursal *-*-*-*-
+
+  obtenerSucursales:
+    handler: src/handlers/sucursal-handler.obtenerTodo
+    events:
+      - http:
+          path: sucursal
+          method: get
+          
+  obtenerSucursal:
+    handler: src/handlers/sucursal-handler.obtenerUno
+    events:
+      - http:
+          path: sucursal/{id}
+          method: get
+
+  crearSucursal:
+    handler: src/handlers/sucursal-handler.crear
+    events:
+      - http:
+          path: sucursal
+          method: post
+
+  actualizarSucursal:
+    handler: src/handlers/sucursal-handler.actualizar
+    events:
+      - http:
+          path: sucursal/{id}
+          method: put
+
