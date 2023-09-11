@@ -26,12 +26,12 @@ const schema = Joi.object({
     NumeroFactura: Joi.string().max(45).required(),
     SerieFactura: Joi.string().max(45).required(),
     CodEmpleado: Joi.number().integer().required(),
-    UsuarioID: Joi.string().max(100).required(),
+    CodPersona: Joi.number().integer().required(),
+    CodSucursal: Joi.number().integer().required(),
     FechaEmision: Joi.string().custom(validarFecha, 'FechaEmision').required(),
     FechaAnulacion: Joi.string().custom(validarFecha, 'FechaAnulacion').required(),
     ComentarioAnulacion: Joi.string().max(300).allow(''),
-    TotalFactura: Joi.number().precision(1).required(),
-    CodSucursal: Joi.number().integer().required()
+    TotalFactura: Joi.number().precision(1).required()
 })  
 
 const validar = (data) => {

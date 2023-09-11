@@ -151,13 +151,6 @@ functions:
           path: proveedor/{id}
           method: put
 
-  eliminarProveedor:
-    handler: src/handlers/proveedor-handler.eliminar
-    events:
-      - http:
-          path: proveedor/{id}
-          method: delete
-
 # -*-*-*-* Estado *-*-*-*-
 
   obtenerEstado:
@@ -487,5 +480,35 @@ functions:
     events:
       - http:
           path: sucursal/{id}
+          method: put
+
+# -*-*-*-* Identificacion *-*-*-*-
+
+  obtenerIdentificaciones:
+    handler: src/handlers/identificacion-handler.obtenerTodo
+    events:
+      - http:
+          path: identificacion
+          method: get
+          
+  obtenerIdentificacion:
+    handler: src/handlers/identificacion-handler.obtenerUno
+    events:
+      - http:
+          path: identificacion/{id}
+          method: get
+
+  crearIdentificacion:
+    handler: src/handlers/identificacion-handler.crear
+    events:
+      - http:
+          path: identificacion
+          method: post
+
+  actualizarIdentificacion:
+    handler: src/handlers/identificacion-handler.actualizar
+    events:
+      - http:
+          path: identificacion/{id}
           method: put
 

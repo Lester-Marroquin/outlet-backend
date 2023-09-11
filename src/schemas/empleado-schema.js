@@ -27,6 +27,7 @@ const schema = Joi.object({
     CodCargo: Joi.number().integer().required(),
     FechaIngreso: Joi.string().custom(validarFecha, 'FechaIngreso').required(),
     FechaRetiro: Joi.string().custom(validarFecha, 'FechaRetiro').allow(''),
+    CodEstado: Joi.number().integer().required(),
     CodEstado: Joi.number().integer().required()
 })  
 

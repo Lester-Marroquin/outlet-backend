@@ -38,7 +38,7 @@ const crear = async (body) => {
     //Verificar si existe
     const consulta = await query.consultarExiste(body);
     if (consulta) {
-      return responseFail({message: `El proveedor ya se encuentra creado con el ID: ${consulta.CodProveedor}`, statusCode: StatusCodes.CONFLICT})
+      return responseFail({data: validacion.details[0].message, message: `El proveedor ya se encuentra creado con el ID: ${consulta.CodProveedor}`, statusCode: StatusCodes.CONFLICT})
     }
 
     const result = await query.crear(body);
@@ -57,7 +57,7 @@ const actualizar = async (body, id) => {
 
     const validacion = validar(body);
     if (validacion) {
-      return responseFail({message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
+      return responseFail({data: validacion.details[0].message, message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
     }
 
     const result = await query.actualizar(body, id);
@@ -69,26 +69,11 @@ const actualizar = async (body, id) => {
   } catch (e) {
     return responseFail({message: e, statusCode: StatusCodes.UNPROCESSABLE_ENTITY})
   }
-};
-
-const eliminar = async (id) => {
-  try {
-
-    const result = await query.eliminar(id);
-    if (!result) {
-      return responseFail({message: 'Error en la inactivación de datos', statusCode: StatusCodes.UNPROCESSABLE_ENTITY})
-    }
-    return responseSuccess({data:result, message:'Inactivación realizada con exito', statusCode: StatusCodes.OK});
-  } catch (e) {
-    return responseFail({message: e, statusCode: StatusCodes.UNPROCESSABLE_ENTITY})
-  }
-};
-
+}
 
 module.exports = {
   obtenerTodo,
   obtenerUno,
   crear,
-  actualizar,
-  eliminar
+  actualizar
 };

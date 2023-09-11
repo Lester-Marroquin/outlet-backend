@@ -41,17 +41,7 @@ const crear = async (event) => {
     return parseResponse(responseE);
   }
 
-  // Asignamos el CodPersona creado a la data para Usuario
-  data.Usuario.CodPersona = responseP.data.CodPersona
-  
-  // Creamos el usuario
-  const responseU = await controllerU.crear(data.Usuario);
-
-  if (responseU.data == null) {
-    return parseResponse(responseU);
-  }
-
-  return parseResponse(responseU);
+  return parseResponse(responseE);
 };
 
 const actualizar = async (event) => {

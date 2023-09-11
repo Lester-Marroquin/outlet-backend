@@ -32,12 +32,12 @@ const crear = async (body) => {
     
     const validacion = validar(body);
     if (validacion) {
-      return responseFail({message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
+      return responseFail({data: validacion.details[0].message, message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
     }
 
     const consulta = await query.consultarExiste(body);
     if (consulta) {
-      return responseFail({message: `El Tipo de Identificación ya se encuentra creado con el ID: ${consulta.Codidentificacion}`, statusCode: StatusCodes.CONFLICT})
+      return responseFail({message: `El Tipo de Identificación ya se encuentra creado con el ID: ${consulta.CodTipoIdentificacion}`, statusCode: StatusCodes.CONFLICT})
     }
 
     const result = await query.crear(body);
@@ -56,7 +56,7 @@ const actualizar = async (body, id) => {
 
     const validacion = validar(body);
     if (validacion) {
-      return responseFail({message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
+      return responseFail({data: validacion.details[0].message, message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
     }
 
     const result = await query.actualizar(body, id);

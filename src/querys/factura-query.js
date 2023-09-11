@@ -35,7 +35,9 @@ const consultarExiste = async(numero, serie) => {
 const crear = async (data) => {
   try {
     const result = await db(nombreTabla).insert(data);
-    return await db(nombreTabla).where('CodCargo', result[0]).first();
+    return await db(nombreTabla)
+    .where('NumeroFactura', result[0])
+    .andWhere('SerieFactura', result[0]).first();
   } catch (e) {
     throw e;
   }

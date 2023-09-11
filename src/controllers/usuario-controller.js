@@ -33,7 +33,7 @@ const crear = async (body) => {
     const validacion = validar(body);
     console.log("Validación: ", validacion);
     if (validacion) {
-      return responseFail({message: 'Los datos no son validos para crear el usuario', statusCode: StatusCodes.BAD_REQUEST})
+      return responseFail({data: validacion.details[0].message, message: 'Los datos no son validos para crear el usuario', statusCode: StatusCodes.BAD_REQUEST})
     }
 
     const result = await query.crear(body);
@@ -52,7 +52,7 @@ const actualizar = async (body, id) => {
 
     const validacion = validar(body);
     if (validacion) {
-      return responseFail({message: 'Los datos no son validos para actualizar el usuario', statusCode: StatusCodes.BAD_REQUEST})
+      return responseFail({data: validacion.details[0].message, message: 'Los datos no son validos para actualizar el usuario', statusCode: StatusCodes.BAD_REQUEST})
     }
 
     const result = await query.actualizar(body, id);
