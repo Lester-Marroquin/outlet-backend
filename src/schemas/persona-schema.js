@@ -26,8 +26,8 @@ const schema = Joi.object({
     Apellido: Joi.string().min(2).max(100).required(),
     FechaNacimiento: Joi.string().custom(validarFecha, 'FechaNacimiento').required(),
     Sexo: Joi.valid(0,1).required(), // 0 = mujer | 1 = hombre
-    NIT: Joi.string().max(15).allow(null),
-    DPI: Joi.string().max(15).allow(null),
+    CodTipoIdentificacion: Joi.number().integer().required(),
+    NumeroIdentificacion: Joi.string().max(20).required(),
     Telefono: Joi.string().min(8).max(10).allow(null),
     Direccion: Joi.string().max(500),
     CodMunicipio: Joi.number().integer().required()

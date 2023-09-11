@@ -8,14 +8,14 @@ const controllerU = require('../controllers/usuario-controller');
 const obtenerTodo = async () => {
   // const unauthResponse = await validarJWT(event);
   // if (unauthResponse) return parseResponse(unauthResponse);
-  const response = await controller.obtenerTodo();
+  const response = await controllerE.obtenerTodo();
   return parseResponse(response);
 };
 
 const obtenerUno = async (event) => {
   // const unauthResponse = await validarJWT(event);
   // if (unauthResponse) return parseResponse(unauthResponse);
-  const response = await controller.obtenerUno(event.pathParameters.id);
+  const response = await controllerE.obtenerUno(event.pathParameters.id);
     return parseResponse(response);
 };
 
@@ -58,7 +58,7 @@ const actualizar = async (event) => {
   // const unauthResponse = await validarJWT(event);
   // if (unauthResponse) return parseResponse(unauthResponse);
 
-  const response = await controller.actualizar(JSON.parse(event.body), event.pathParameters.id);
+  const response = await controllerE.actualizar(JSON.parse(event.body), event.pathParameters.id);
   return parseResponse(response);
 };
 
@@ -66,7 +66,7 @@ const eliminar = async (event) => {
   // const unauthResponse = await validarJWT(event);
   // if (unauthResponse) return parseResponse(unauthResponse);
 
-  const response = await controller.eliminar(event.pathParameters.id);
+  const response = await controllerE.eliminar(event.pathParameters.id);
   return parseResponse(response);
 };
 
