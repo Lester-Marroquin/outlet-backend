@@ -17,9 +17,8 @@ const obtenerTodo = async () => {
 
 const obtenerUno = async (id) => {
   try {
-
     return await db(nombreTabla1)
-    .select(`${nombreTabla}.NombreSucursal`, `${nombreTabla1}.DireccionSucursal`, `${nombreTabla2}.Municipio`, `${nombreTabla3}.Departamento`)
+    .select(`${nombreTabla1}.NombreSucursal`, `${nombreTabla1}.DireccionSucursal`, `${nombreTabla2}.Municipio`, `${nombreTabla3}.Departamento`)
     .join(nombreTabla2, 'Sucursal.CodMunicipio', '=', 'Municipio.CodMunicipio')
     .join(nombreTabla3, 'Municipio.CodDepartamento', '=', 'Departamento.CodDepartamento')
     .where('CodSucursal', id).first()
@@ -32,7 +31,7 @@ const consultarExiste = async(data) => {
   try {
     const result = await db
       .select()
-      .from(nombreTabla)
+      .from(nombreTabla1)
       .whereRaw('LOWER(NombreSucursal) like ?', `%${data.NombreSucursal.toLowerCase()}%`)
       .first();
     return result;
@@ -43,8 +42,8 @@ const consultarExiste = async(data) => {
 
 const crear = async (data) => {
   try {
-    const result = await db(nombreTabla).insert(data);
-    return await db(nombreTabla).where('CodSucursal', result[0]).first();
+    const result = await db(nombreTabla1).insert(data);
+    return await db(nombreTabla1).where('CodSucursal', result[0]).first();
   } catch (e) {
     throw e;
   }
@@ -52,8 +51,8 @@ const crear = async (data) => {
 
 const actualizar = async (data, id) => {
   try {
-    await db(nombreTabla).where('CodSucursal', id).update(data);
-    return await db.select().where('CodSucursal', id).table(nombreTabla).first();
+    await db(nombreTabla1).where('CodSucursal', id).update(data);
+    return await db.select().where('CodSucursal', id).table(nombreTabla1).first();
   } catch (e) {
     throw e;
   }

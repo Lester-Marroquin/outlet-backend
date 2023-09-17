@@ -1,5 +1,6 @@
 const { responseSuccess, responseFail } = require('../helpers/response')
 const { validar } = require('../schemas/factura-schema');
+const { validarDetalle } = require('../schemas/detalle-factura-schema');
 const query  = require('../querys/factura-query');
 const { StatusCodes } = require('http-status-codes');
 
@@ -18,8 +19,8 @@ const obtenerTodo = async () => {
 const obtenerUno = async (data) => {
   try {
   
-    const numero = data.NumeroFactura;
-    const serie = data.SerieFactura
+    const numero = data.queryStringParameters.NumeroFactura;
+    const serie = data.queryStringParameters.SerieFactura;
   
     const result = await query.obtenerUno(numero, serie);
     if (!result) {
@@ -34,12 +35,22 @@ const obtenerUno = async (data) => {
 const crear = async (body) => {
   try {
     
-    const numero = body.NumeroFactura;
-    const serie = body.SerieFactura
+    const numero = body.Factura.NumeroFactura;
+    const serie = body.Factura.SerieFactura
 
-    const validacion = validar(body);
-    if (validacion) {
-      return responseFail({data: validacion.details[0].message, message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
+    const validacionFactura = validar(body.Factura);
+    if (validacionFactura) {
+      return responseFail({data: validacionFactura.details[0].message, message: 'Los datos de la factura no son validos', statusCode: StatusCodes.BAD_REQUEST})
+    } else {
+
+      for (let i = 0; i < body.DetalleFactura.length; i++) {
+        const data = body.DetalleFactura[i];
+        const validacionDetalle = validarDetalle(data);
+    
+        if (validacionDetalle) {
+          return responseFail({data: validacionDetalle.details[0].message, message: 'Los datos del detalle de la factura no son validos', statusCode: StatusCodes.BAD_REQUEST})
+        }
+      }
     }
 
     const consulta = await query.consultarExiste(numero, serie);
@@ -50,7 +61,8 @@ const crear = async (body) => {
     const result = await query.crear(body);
     if (!result) {
       return responseFail({message: 'Error en la inserción de datos', statusCode: StatusCodes.NOT_FOUND})
-    }
+    } 
+
     return responseSuccess({data: result, message: 'Factura guardada exitosamente'});
   
   } catch (e) {
@@ -61,15 +73,16 @@ const crear = async (body) => {
 const actualizar = async (body) => {
   try {
 
-    const numero = body.NumeroFactura;
-    const serie = body.SerieFactura
-
-    const validacion = validar(body);
+    const numero = body.queryStringParameters.NumeroFactura;
+    const serie = body.queryStringParameters.SerieFactura;
+    const data = JSON.parse(body.body)
+    
+    const validacion = validar(data);
     if (validacion) {
       return responseFail({data: validacion.details[0].message, message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
     }
 
-    const result = await query.actualizar(numero, serie);
+    const result = await query.actualizar(numero, serie, data);
     if (!result) {
       return responseFail({message: 'Error en la actualización de datos', statusCode: StatusCodes.NOT_FOUND})
     }

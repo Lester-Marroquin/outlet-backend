@@ -1,10 +1,16 @@
 const { db } = require('../config/connection');
 
-const nombreTabla = 'Persona';
+const nombreTabla1 = 'Persona';
+const nombreTabla2 = 'TipoIdentificacion';
+const nombreTabla3 = 'Municipio';
+const nombreTabla4 = 'Departamento';
 
 const obtenerTodo = async () => {
   try {
-    return await db.select().table(nombreTabla);
+    return await db(nombreTabla1).select()
+    .join(nombreTabla2, `${nombreTabla1}.CodTipoIdentificacion`, '=', `${nombreTabla2}.CodTipoIdentificacion`)
+    .join(nombreTabla3, `${nombreTabla1}.CodMunicipio`, '=', `${nombreTabla3}.CodMunicipio`)
+    .join(nombreTabla4, `${nombreTabla3}.CodDepartamento`, '=', `${nombreTabla4}.CodDepartamento`)
   } catch (e) {
     throw e;
   }
@@ -12,7 +18,11 @@ const obtenerTodo = async () => {
 
 const obtenerUno = async (id) => {
   try {
-    return await db.select().where('CodPersona', id).table(nombreTabla).first();
+    return await db(nombreTabla1).select()
+    .join(nombreTabla2, `${nombreTabla1}.CodTipoIdentificacion`, '=', `${nombreTabla2}.CodTipoIdentificacion`)
+    .join(nombreTabla3, `${nombreTabla1}.CodMunicipio`, '=', `${nombreTabla3}.CodMunicipio`)
+    .join(nombreTabla4, `${nombreTabla3}.CodDepartamento`, '=', `${nombreTabla4}.CodDepartamento`)
+    .where('CodPersona', id).first();
   } catch (e) {
     throw e;
   }
@@ -22,9 +32,10 @@ const consultarExiste = async(data) => {
   try {
     const result = await db
       .select()
-      .from(nombreTabla)
-      .where('DPI', data.DPI)
-      .orWhere('NIT', data.NIT)
+      .from(nombreTabla1)
+      .whereRaw('LOWER(Nombre) like ?', `%${data.Nombre.toLowerCase()}%`)
+      .andWhereRaw('LOWER(Apellido) like ?', `%${data.Apellido.toLowerCase()}%`)
+      .orWhere('NumeroIdentificacion', data.NumeroIdentificacion)
       .first();
     return result;
   } catch (e) {
@@ -34,8 +45,8 @@ const consultarExiste = async(data) => {
 
 const crear = async (data) => {
   try {
-    const result = await db(nombreTabla).insert(data);
-    return await db(nombreTabla).where('CodPersona', result[0]).first();
+    const result = await db(nombreTabla1).insert(data);
+    return await db(nombreTabla1).where('CodPersona', result[0]).first();
   } catch (e) {
     throw e;
   }
@@ -43,8 +54,8 @@ const crear = async (data) => {
 
 const actualizar = async (data, id) => {
   try {
-    await db(nombreTabla).where('CodPersona', id).update(data);
-    return await db(nombreTabla).where('CodPersona', id).first();
+    await db(nombreTabla1).where('CodPersona', id).update(data);
+    return await db(nombreTabla1).where('CodPersona', id).first();
   } catch (e) {
     throw e;
   }

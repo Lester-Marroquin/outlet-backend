@@ -222,7 +222,7 @@ functions:
           method: get
           
   obtenerCargo:
-    handler: src/handlers/cargo-handler.obtener
+    handler: src/handlers/cargo-handler.obtenerUno
     events:
       - http:
           path: cargo/{id}
@@ -512,3 +512,42 @@ functions:
           path: identificacion/{id}
           method: put
 
+# -*-*-*-* Factura *-*-*-*-
+
+  obtenerFacturas:
+    handler: src/handlers/factura-handler.obtenerTodo
+    events:
+      - http:
+          path: facturas
+          method: get
+          
+  obtenerFactura:
+    handler: src/handlers/factura-handler.obtenerUno
+    events:
+      - http:
+          path: factura
+          method: get
+          request:
+            parameters:
+              querystrings:
+                NumeroFactura: true
+                SerieFactura: true
+
+  crearFactura:
+    handler: src/handlers/factura-handler.crear
+    events:
+      - http:
+          path: factura
+          method: post
+
+  actualizarFactura:
+    handler: src/handlers/factura-handler.actualizar
+    events:
+      - http:
+          path: factura
+          method: put
+          request:
+            parameters:
+              querystrings:
+                NumeroFactura: true
+                SerieFactura: true

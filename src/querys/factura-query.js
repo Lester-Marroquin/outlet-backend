@@ -1,10 +1,15 @@
 const { db } = require('../config/connection');
 
-const nombreTabla = 'Factura';
+const nombreTabla1 = 'Factura';
+const nombreTabla2 = 'DetalleFactura';
+const nombreTabla3 = 'Persona';
+const nombreTabla4 = 'Sucursal';
 
 const obtenerTodo = async () => {
   try {
-    return await db.select().table(nombreTabla);
+    return await db.select().table(nombreTabla1)
+    .join({ p: nombreTabla3 }, `${nombreTabla1}.CodPersona`, '=', `p.CodPersona`)
+    .join({ s: nombreTabla4 }, `${nombreTabla1}.CodSucursal`, '=', `s.CodSucursal`)
   } catch (e) {
     throw e;
   }
@@ -12,10 +17,21 @@ const obtenerTodo = async () => {
 
 const obtenerUno = async (numero, serie) => {
   try {
-    return await db.select()
+    const Factura = await db(nombreTabla1)
+    .select()
+    .join({ p: nombreTabla3 }, `${nombreTabla1}.CodPersona`, '=', `p.CodPersona`)
+    .join({ s: nombreTabla4 }, `${nombreTabla1}.CodSucursal`, '=', `s.CodSucursal`)
     .where('NumeroFactura', numero)
     .andWhere('SerieFactura', serie)
-    .table(nombreTabla).first();
+    .first();
+
+    const DetalleFactura = await db(nombreTabla2)
+    .select()
+    .where('NumeroFactura', numero)
+    .andWhere('SerieFactura', serie);
+
+    return data = { Factura, DetalleFactura };
+
   } catch (e) {
     throw e;
   }
@@ -23,10 +39,11 @@ const obtenerUno = async (numero, serie) => {
 
 const consultarExiste = async(numero, serie) => {
   try {
-    return await db.select()
+    return await db(nombreTabla1)
+    .select()
     .where('NumeroFactura', numero)
     .andWhere('SerieFactura', serie)
-    .table(nombreTabla).first();
+    .first();
   } catch (e) {
     throw e;
   }
@@ -34,20 +51,43 @@ const consultarExiste = async(numero, serie) => {
 
 const crear = async (data) => {
   try {
-    const result = await db(nombreTabla).insert(data);
-    return await db(nombreTabla)
-    .where('NumeroFactura', result[0])
-    .andWhere('SerieFactura', result[0]).first();
+
+    const dataFactura = data.Factura;
+    const dataDetalleFactura = data.DetalleFactura;
+
+    await db(nombreTabla1).insert(dataFactura);
+
+    for (let i = 0; i < dataDetalleFactura.length; i++) {
+      await db(nombreTabla2).insert(dataDetalleFactura[i]);
+      
+    }
+
+    const Factura = await db(nombreTabla1)
+    .select()
+    .where('NumeroFactura', dataFactura.NumeroFactura)
+    .andWhere('SerieFactura', dataFactura.SerieFactura)
+    .first();
+
+    const DetalleFactura = await db(nombreTabla2)
+    .select()
+    .where('NumeroFactura', dataFactura.NumeroFactura)
+    .andWhere('SerieFactura', dataFactura.SerieFactura);
+
+    return data = { Factura, DetalleFactura };
+
   } catch (e) {
     throw e;
   }
 };
 
-const actualizar = async (numero, serie) => {
+const actualizar = async (numero, serie, data) => {
   try {
-    await db(nombreTabla).where('NumeroFactura', numero).andWhere('SerieFactura', serie).update(data);
-    return await db.select().where('NumeroFactura', numero).andWhere('SerieFactura', serie)
-    .table(nombreTabla).first();
+    await db(nombreTabla1)
+    .where('NumeroFactura', numero)
+    .andWhere('SerieFactura', serie).update(data);
+    return await db.select().where('NumeroFactura', numero)
+    .andWhere('SerieFactura', serie)
+    .table(nombreTabla1).first();
   } catch (e) {
     throw e;
   }

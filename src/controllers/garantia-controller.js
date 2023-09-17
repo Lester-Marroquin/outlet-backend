@@ -37,7 +37,7 @@ const crear = async (body) => {
 
     const consulta = await query.consultarExiste(body);
     if (consulta) {
-      return responseFail({message: `La categoria de garantia ya se encuentra creado con el ID: ${consulta.CodCargo}`, statusCode: StatusCodes.CONFLICT})
+      return responseFail({message: `La categoria de garantia ya se encuentra creado con el ID: ${consulta.CodGarantiaProducto}`, statusCode: StatusCodes.CONFLICT})
     }
 
     const result = await query.crear(body);

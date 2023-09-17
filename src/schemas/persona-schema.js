@@ -22,13 +22,15 @@ const validarFecha = (value, helpers) => {
 }
 
 const schema = Joi.object({
+    CodPersona: Joi.number().integer().optional(),
     Nombre: Joi.string().min(2).max(100).required(),
     Apellido: Joi.string().min(2).max(100).required(),
     FechaNacimiento: Joi.string().custom(validarFecha, 'FechaNacimiento').required(),
     Sexo: Joi.valid(0,1).required(), // 0 = mujer | 1 = hombre
     CodTipoIdentificacion: Joi.number().integer().required(),
     NumeroIdentificacion: Joi.string().max(20).required(),
-    Telefono: Joi.string().min(8).max(10).allow(null),
+    Telefono: Joi.string().min(8).max(10).required(),
+    Correo: Joi.string().email().max(100).required(),
     Direccion: Joi.string().max(500),
     CodMunicipio: Joi.number().integer().required()
 })  

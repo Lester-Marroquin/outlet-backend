@@ -1,10 +1,16 @@
 const { db } = require('../config/connection');
 
-const nombreTabla = 'Producto';
+const nombreTabla1 = 'Producto';
+const nombreTabla2 = 'ImagenProducto';
+const nombreTabla3 = 'MarcaProducto';
+const nombreTabla4 = 'CategoriaProducto';
 
 const obtenerTodo = async () => {
   try {
-    return await db.select().table(nombreTabla);
+    await db(nombreTabla1)
+    .select()
+    .join(nombreTabla3, `${nombreTabla1}.CodMarcaProducto`, '=', `${nombreTabla3}.CodMarcaProducto`)
+    .join(nombreTabla4, `${nombreTabla1}.CodCategoriaProducto`, '=', `${nombreTabla4}.CodCategoriaProducto`)
   } catch (e) {
     throw e;
   }
@@ -12,7 +18,14 @@ const obtenerTodo = async () => {
 
 const obtenerUno = async (id) => {
   try {
-    return await db.select().where('CodProducto', id).table(nombreTabla).first();
+    const Producto = await db(nombreTabla1).select()
+    .join(nombreTabla3, `${nombreTabla1}.CodMarcaProducto`, '=', `${nombreTabla3}.CodMarcaProducto`)
+    .join(nombreTabla4, `${nombreTabla1}.CodCategoriaProducto`, '=', `${nombreTabla4}.CodCategoriaProducto`)
+    .where('CodProducto', id).first();
+    
+    const ImagenProducto = await db(nombreTabla2).select().where('CodProducto', id)
+    
+    return data = { Producto, ImagenProducto}
   } catch (e) {
     throw e;
   }
@@ -22,7 +35,7 @@ const consultarExiste = async(data) => {
   try {
     const result = await db
       .select()
-      .from(nombreTabla)
+      .from(nombreTabla1)
       .whereRaw('LOWER(Producto) like ?', `%${data.Producto.toLowerCase()}%`)
       .first();
     return result;
@@ -33,8 +46,8 @@ const consultarExiste = async(data) => {
 
 const crear = async (data) => {
   try {
-    const result = await db(nombreTabla).insert(data);
-    return await db(nombreTabla).where('CodProducto', result[0]).first();
+    const result = await db(nombreTabla1).insert(data);
+    return await db(nombreTabla1).where('CodProducto', result[0]).first();
   } catch (e) {
     throw e;
   }
@@ -42,8 +55,8 @@ const crear = async (data) => {
 
 const actualizar = async (data, id) => {
   try {
-    await db(nombreTabla).where('CodProducto', id).update(data);
-    return await db.select().where('CodProducto', id).table(nombreTabla).first();
+    await db(nombreTabla1).where('CodProducto', id).update(data);
+    return await db.select().where('CodProducto', id).table(nombreTabla1).first();
   } catch (e) {
     throw e;
   }

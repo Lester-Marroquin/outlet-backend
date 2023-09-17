@@ -1,7 +1,7 @@
 const Joi = require('joi')
 
 const schema = Joi.object({
-    ImagenUlr: Joi.string().max(300).required(),
+    ImagenUrl: Joi.string().max(300).required(),
     CodProducto: Joi.number().integer().required()
 })  
 

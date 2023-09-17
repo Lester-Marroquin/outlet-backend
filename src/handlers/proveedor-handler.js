@@ -32,18 +32,9 @@ const actualizar = async (event) => {
   return parseResponse(response);
 };
 
-const eliminar = async (event) => {
-  // const unauthResponse = await validarJWT(event);
-  // if (unauthResponse) return parseResponse(unauthResponse);
-
-  const response = await controller.eliminar(event.pathParameters.id);
-  return parseResponse(response);
-};
-
 module.exports = {
   obtenerTodo,
   obtenerUno,
   crear,
-  actualizar,
-  eliminar
+  actualizar
 };

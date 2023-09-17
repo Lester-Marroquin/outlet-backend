@@ -25,8 +25,10 @@ const consultarExiste = async(data) => {
       .from(nombreTabla)
       .where(function () {
         this.whereRaw('LOWER(RazonSocial) like ?', `%${data.RazonSocial.toLowerCase()}%`)
-          .orWhereRaw('LOWER(NombreComercial) like ?', `%${data.NombreComercial.toLowerCase()}%`);
-      }).first();
+          .orWhereRaw('LOWER(NombreComercial) like ?', `%${data.NombreComercial.toLowerCase()}%`)
+      })
+      .orWhere('NumeroIdentificacion', data.NumeroIdentificacion)
+      .first();
     return result;
   } catch (e) {
     throw e;

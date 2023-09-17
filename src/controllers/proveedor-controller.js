@@ -38,7 +38,7 @@ const crear = async (body) => {
     //Verificar si existe
     const consulta = await query.consultarExiste(body);
     if (consulta) {
-      return responseFail({data: validacion.details[0].message, message: `El proveedor ya se encuentra creado con el ID: ${consulta.CodProveedor}`, statusCode: StatusCodes.CONFLICT})
+      return responseFail({message: `El proveedor ya se encuentra creado con el ID: ${consulta.CodProveedor} e Identificación Numero: ${ consulta.NumeroIdentificacion }`, statusCode: StatusCodes.CONFLICT})
     }
 
     const result = await query.crear(body);

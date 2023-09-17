@@ -13,7 +13,7 @@ const obtenerTodo = async () => {
 const obtenerUno = async (event) => {
   // const unauthResponse = await validarJWT(event);
   // if (unauthResponse) return parseResponse(unauthResponse);
-  const response = await controller.obtenerUno(event.body);
+  const response = await controller.obtenerUno(event);
     return parseResponse(response);
 };
 
@@ -28,7 +28,7 @@ const actualizar = async (event) => {
   // const unauthResponse = await validarJWT(event);
   // if (unauthResponse) return parseResponse(unauthResponse);
 
-  const response = await controller.actualizar(JSON.parse(event.body));
+  const response = await controller.actualizar(event);
   return parseResponse(response);
 };
 

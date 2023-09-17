@@ -1,10 +1,14 @@
 const { db } = require('../config/connection');
 
-const nombreTabla = 'Usuario';
+const nombreTabla1 = 'Usuario';
+const nombreTabla2 = 'Persona';
+
+//Modificar los metodos de esta clase
 
 const obtenerTodo = async () => {
   try {
-    return await db.select().table(nombreTabla);
+    return await db(nombreTabla1).select()
+    .join(nombreTabla2, `${nombreTabla1}.CodPersona`, '=', `${nombreTabla2}.CodPersona`);
   } catch (e) {
     throw e;
   }
@@ -12,7 +16,9 @@ const obtenerTodo = async () => {
 
 const obtenerUno = async (id) => {
   try {
-    return await db.select().where('UsuarioID', id).table(nombreTabla).first();
+    return await db(nombreTabla1).select()
+    .join(nombreTabla2, `${nombreTabla1}.CodPersona`, '=', `${nombreTabla2}.CodPersona`)
+    .where('CodUsuario', id).first();
   } catch (e) {
     throw e;
   }
@@ -20,14 +26,10 @@ const obtenerUno = async (id) => {
 
 const crear = async (data) => {
   try {
-    //Insertar los valor de usuario en la tabla Usuario
-    await db(nombreTabla).insert(data);
-    
-    // Asignamos el valor de UsuarioID a una variable
-    const usuarioID = data.UsuarioID;
-
-    //Busqueda del valor ingresado en base al parametro que tremos en data
-    return await db(nombreTabla).where('UsuarioID', usuarioID).first();
+    const result = await db(nombreTabla1).insert(data);
+    return await db(nombreTabla1).select()
+    .join(nombreTabla2, `${nombreTabla1}.CodPersona`, '=', `${nombreTabla2}.CodPersona`)
+    .where('CodUsuario', result[0]).first();
   } catch (e) {
     throw e;
   }
@@ -35,17 +37,10 @@ const crear = async (data) => {
 
 const actualizar = async (data, id) => {
   try {
-    await db(nombreTabla).where('UsuarioID', id).update(data);
-    return await db(nombreTabla).where('UsuarioID', id).first();
-  } catch (e) {
-    throw e;
-  }
-};
-
-const eliminar = async (id) => {
-  try {
-    await db(nombreTabla).where('UsuarioID', id).update({CodEstado: 2});
-    return await db(nombreTabla).where('UsuarioID', id).first();
+    await db(nombreTabla1).where('CodUsuario', id).update(data);
+    return await db(nombreTabla1).select()
+    .join(nombreTabla2, `${nombreTabla1}.CodPersona`, '=', `${nombreTabla2}.CodPersona`)
+    .where('CodUsuario', id).first();
   } catch (e) {
     throw e;
   }
@@ -55,6 +50,5 @@ module.exports = {
   obtenerTodo,
   obtenerUno,
   crear,
-  actualizar,
-  eliminar
+  actualizar
 };

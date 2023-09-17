@@ -10,8 +10,8 @@ const schema = Joi.object({
     CodMarcaProducto: Joi.number().integer().required(),
     Observaciones: Joi.string().max(300).allow(''),
     CodEstado: Joi.number().integer().required(),
-    Tipo: Joi.string().valid('Servicio', 'Producto')
-
+    Tipo: Joi.string().valid('Servicio', 'Producto'),
+    CodProveedor: Joi.number().integer().required(),
 })  
 
 const validar = (data) => {

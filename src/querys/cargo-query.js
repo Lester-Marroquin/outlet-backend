@@ -12,7 +12,7 @@ const obtenerTodo = async () => {
 
 const obtenerUno = async (id) => {
   try {
-    return await db.select().where('CodCargo', id).table(nombreTabla).first();
+    return await db(nombreTabla).select().where('CodCargo', id).first();
   } catch (e) {
     throw e;
   }

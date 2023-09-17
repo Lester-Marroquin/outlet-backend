@@ -26,6 +26,7 @@ const schema = Joi.object({
     CodPersona: Joi.number().integer().required(),
     CodRol: Joi.number().integer().required(),
     FechaRegistro: Joi.string().custom(validarFecha, 'FechaNacimiento').required(),
+    FechaBaja: Joi.string().custom(validarFecha, 'FechaBaja').allow(null, ''),
     ClaveUsuario: Joi.string().max(256).required(),
     CodEstado: Joi.number().integer().required()
 })  
