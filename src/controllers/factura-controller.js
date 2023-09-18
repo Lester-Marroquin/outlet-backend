@@ -46,7 +46,7 @@ const crear = async (body) => {
       for (let i = 0; i < body.DetalleFactura.length; i++) {
         const data = body.DetalleFactura[i];
         const validacionDetalle = validarDetalle(data);
-    
+
         if (validacionDetalle) {
           return responseFail({data: validacionDetalle.details[0].message, message: 'Los datos del detalle de la factura no son validos', statusCode: StatusCodes.BAD_REQUEST})
         }
@@ -77,9 +77,19 @@ const actualizar = async (body) => {
     const serie = body.queryStringParameters.SerieFactura;
     const data = JSON.parse(body.body)
     
-    const validacion = validar(data);
+    const validacion = validar(data.Factura);
     if (validacion) {
       return responseFail({data: validacion.details[0].message, message: 'Los datos no son validos', statusCode: StatusCodes.BAD_REQUEST})
+    } else {
+
+      for (let i = 0; i < data.DetalleFactura.length; i++) {
+        const DetalleFactura = data.DetalleFactura[i];
+        const validacionDetalle = validarDetalle(DetalleFactura);
+
+        if (validacionDetalle) {
+          return responseFail({data: validacionDetalle.details[0].message, message: 'Los datos del detalle de la factura no son validos', statusCode: StatusCodes.BAD_REQUEST})
+        }
+      }
     }
 
     const result = await query.actualizar(numero, serie, data);

@@ -1,6 +1,7 @@
 const Joi = require('joi')
 
 const schema = Joi.object({
+    CodDetalleFactura: Joi.number().integer().optional(),
     NumeroFactura: Joi.string().max(45).required(),
     SerieFactura: Joi.string().max(45).required(),
     Cantidad: Joi.number().integer().required(),

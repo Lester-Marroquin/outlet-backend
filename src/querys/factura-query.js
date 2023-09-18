@@ -4,6 +4,7 @@ const nombreTabla1 = 'Factura';
 const nombreTabla2 = 'DetalleFactura';
 const nombreTabla3 = 'Persona';
 const nombreTabla4 = 'Sucursal';
+const nombreTabla5 = 'Producto';
 
 const obtenerTodo = async () => {
   try {
@@ -49,6 +50,29 @@ const consultarExiste = async(numero, serie) => {
   }
 }
 
+const actualizarInventario = async (dataDetalleFactura, operacion) => {
+
+  const idsProductos = [];
+  for (let i = 0; i < dataDetalleFactura.length; i++) {
+    idsProductos.push(dataDetalleFactura[i].CodProducto);    
+  }
+  const productos = await db(nombreTabla5).whereIn('CodProducto', idsProductos);
+  if (operacion) {
+    for (let i = 0; i < productos.length; i++) {
+      const cantidadNueva = productos[i].Cantidad - dataDetalleFactura[i].Cantidad;
+      productos[i].Cantidad = cantidadNueva;
+      await db(nombreTabla5).where('CodProducto', productos[i].CodProducto).update(productos[i]);
+    }  
+  } else {
+    for (let i = 0; i < productos.length; i++) {
+      const cantidadNueva = productos[i].Cantidad + dataDetalleFactura[i].Cantidad;
+      productos[i].Cantidad = cantidadNueva;
+      await db(nombreTabla5).where('CodProducto', productos[i].CodProducto).update(productos[i]);
+    }  
+  }
+}
+
+
 const crear = async (data) => {
   try {
 
@@ -56,11 +80,9 @@ const crear = async (data) => {
     const dataDetalleFactura = data.DetalleFactura;
 
     await db(nombreTabla1).insert(dataFactura);
+    await db(nombreTabla2).insert(dataDetalleFactura);
 
-    for (let i = 0; i < dataDetalleFactura.length; i++) {
-      await db(nombreTabla2).insert(dataDetalleFactura[i]);
-      
-    }
+    await actualizarInventario(dataDetalleFactura, operacion = true);
 
     const Factura = await db(nombreTabla1)
     .select()
@@ -82,12 +104,35 @@ const crear = async (data) => {
 
 const actualizar = async (numero, serie, data) => {
   try {
+
+    const dataFactura = data.Factura;
+    const dataDetalleFactura = data.DetalleFactura;
+
     await db(nombreTabla1)
     .where('NumeroFactura', numero)
-    .andWhere('SerieFactura', serie).update(data);
-    return await db.select().where('NumeroFactura', numero)
-    .andWhere('SerieFactura', serie)
-    .table(nombreTabla1).first();
+    .andWhere('SerieFactura', serie).update(dataFactura);
+
+    for (let i = 0; i < dataDetalleFactura.length; i++) {
+        await db(nombreTabla2)
+        .where('CodDetalleFactura', dataDetalleFactura[i].CodDetalleFactura)
+        .update(dataDetalleFactura[i])
+    }
+
+    await actualizarInventario(dataDetalleFactura, operacion = false);
+
+    const Factura = await db(nombreTabla1)
+    .select()
+    .where('NumeroFactura', dataFactura.NumeroFactura)
+    .andWhere('SerieFactura', dataFactura.SerieFactura)
+    .first();
+
+    const DetalleFactura = await db(nombreTabla2)
+    .select()
+    .where('NumeroFactura', dataFactura.NumeroFactura)
+    .andWhere('SerieFactura', dataFactura.SerieFactura);
+
+    return data = { Factura, DetalleFactura };
+    
   } catch (e) {
     throw e;
   }
