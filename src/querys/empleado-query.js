@@ -35,24 +35,29 @@ const obtenerUno = async (id) => {
 };
 
 const crear = async (data) => {
+  const tr = await db.transaction();
   try {
-    const result = await db(nombreTabla1).insert(data);
+    const result = await tr(nombreTabla1).insert(data);
+    await tr.commit();
     return await db(nombreTabla1).select()
     .join(nombreTabla2, `${nombreTabla1}.CodPersona`, '=', `${nombreTabla2}.CodPersona`)
     .where('CodEmpleado', result[0]).first();
   } catch (e) {
+    await tr.rollback();
     throw e;
   }
 };
 
 const actualizar = async (data, id) => {
+  const tr = await db.transaction();
   try {
-    
-    await db(nombreTabla1).where('CodEmpleado', id).update(data);
+    await tr(nombreTabla1).where('CodEmpleado', id).update(data);
+    await tr.commit();
     return await db.select()
     .join(nombreTabla2, `${nombreTabla1}.CodPersona`, '=', `${nombreTabla2}.CodPersona`)
     .where('CodEmpleado', id).table(nombreTabla1).first()
   } catch (e) {
+    await tr.rollback();
     throw e;
   }
 };

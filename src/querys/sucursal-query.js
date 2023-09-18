@@ -41,19 +41,25 @@ const consultarExiste = async(data) => {
 }
 
 const crear = async (data) => {
+  const tr = await db.transaction();  
   try {
-    const result = await db(nombreTabla1).insert(data);
+    const result = await tr(nombreTabla1).insert(data);
+    await tr.commit();
     return await db(nombreTabla1).where('CodSucursal', result[0]).first();
   } catch (e) {
+    await tr.rollback();
     throw e;
   }
 };
 
 const actualizar = async (data, id) => {
+  const tr = await db.transaction();
   try {
-    await db(nombreTabla1).where('CodSucursal', id).update(data);
+    await tr(nombreTabla1).where('CodSucursal', id).update(data);
+    await tr.commit();
     return await db.select().where('CodSucursal', id).table(nombreTabla1).first();
   } catch (e) {
+    await tr.rollback();
     throw e;
   }
 };

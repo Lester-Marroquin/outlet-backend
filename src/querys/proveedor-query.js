@@ -36,28 +36,25 @@ const consultarExiste = async(data) => {
 }
 
 const crear = async (data) => {
+  const tr = await db.transaction();
   try {
-    const result = await db(nombreTabla).insert(data);
+    const result = await tr(nombreTabla).insert(data);
+    await tr.commit();
     return await db(nombreTabla).where('CodProveedor', result[0]).first();
   } catch (e) {
+    await tr.rollback();
     throw e;
   }
 };
 
 const actualizar = async (data, id) => {
+  const tr = await db.transaction();
   try {
-    await db(nombreTabla).where('CodProveedor', id).update(data);
+    await tr(nombreTabla).where('CodProveedor', id).update(data);
+    await tr.commit();
     return await db.select().where('CodProveedor', id).table(nombreTabla).first();
   } catch (e) {
-    throw e;
-  }
-};
-
-const eliminar = async (id) => {
-  try {
-    await db(nombreTabla).where('CodProveedor', id).update({CodEstado: 2});
-    return await db(nombreTabla).where('CodProveedor', id).first();
-  } catch (e) {
+    await tr.rollback();
     throw e;
   }
 };
@@ -67,6 +64,5 @@ module.exports = {
   obtenerUno,
   consultarExiste,
   crear,
-  actualizar,
-  eliminar
+  actualizar
 };
