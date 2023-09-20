@@ -2,10 +2,9 @@
 const { parseResponse } = require('../helpers/response')
 // const { responseFail } = require('../helpers/response')
 const controller = require('../controllers/usuario-controller');
-const controllerP = require('../controllers/persona-controller');
-// const { validarJWT } = require('../helpers/validar-jwt')
+const { validarJWT } = require('../helpers/validar-jwt')
 
-const obtenerTodo = async () => {
+const obtenerTodo = async (event) => {
   // const unauthResponse = await validarJWT(event);
   // if (unauthResponse) return parseResponse(unauthResponse);
   const response = await controller.obtenerTodo();

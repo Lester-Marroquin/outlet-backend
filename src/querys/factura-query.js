@@ -63,13 +63,13 @@ const actualizarInventario = async (dataDetalleFactura, operacion) => {
         const cantidadNueva = productos[i].Cantidad - dataDetalleFactura[i].Cantidad;
         productos[i].Cantidad = cantidadNueva;
         await tr(nombreTabla5).where('CodProducto', productos[i].CodProducto).update(productos[i]);
-      }  
+      }
     } else {
       for (let i = 0; i < productos.length; i++) {
         const cantidadNueva = productos[i].Cantidad + dataDetalleFactura[i].Cantidad;
         productos[i].Cantidad = cantidadNueva;
         await tr(nombreTabla5).where('CodProducto', productos[i].CodProducto).update(productos[i]);
-      }  
+      }
     }
     await tr.commit();
     return true
@@ -78,7 +78,6 @@ const actualizarInventario = async (dataDetalleFactura, operacion) => {
     throw e;
   }
 }
-
 
 const crear = async (data) => {
   const tr = await db.transaction();

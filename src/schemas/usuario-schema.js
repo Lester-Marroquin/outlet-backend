@@ -23,13 +23,13 @@ const validarFecha = (value, helpers) => {
 
 const schema = Joi.object({
     UsuarioID: Joi.string().required(),
+    ClaveUsuario: Joi.string().max(128).required(),
     CodPersona: Joi.number().integer().required(),
     CodRol: Joi.number().integer().required(),
     FechaRegistro: Joi.string().custom(validarFecha, 'FechaNacimiento').required(),
     FechaBaja: Joi.string().custom(validarFecha, 'FechaBaja').allow(null, ''),
-    ClaveUsuario: Joi.string().max(256).required(),
     CodEstado: Joi.number().integer().required()
-})  
+})
 
 const validar = (data) => {
     const { error } = schema.validate(data)

@@ -15,6 +15,9 @@ provider:
   timeout: 30
   environment:
     ENV: ${file(./src/config/${opt:state, 'dev'}.json):ENV}
+    KEYSECRET: ${file(./src/config/${opt:state, 'dev'}.json):KEYSECRET}
+    SALTROUND: ${file(./src/config/${opt:state, 'dev'}.json):SALTROUND}
+    CADUCIDAD_TOKEN: ${file(./src/config/${opt:state, 'dev'}.json):CADUCIDAD_TOKEN}
     DB_USER: ${file(./src/config/${opt:state, 'dev'}.json):DB_USER} 
     DB_PORT: ${file(./src/config/${opt:state, 'dev'}.json):DB_PORT}
     DB_PASSWORD: ${file(./src/config/${opt:state, 'dev'}.json):DB_PASSWORD}
@@ -30,9 +33,25 @@ custom:
     automatic: true
     number: 2
 
+functions:
+# -*-*-*-* Loing *-*-*-*-
+
+  loginEmpleado:
+    handler: src/handlers/login-handler.loginEmpleado
+    events:
+      - http:
+          path: login-empleado
+          method: post
+
+  loginUsuario:
+    handler: src/handlers/login-handler.loginUsuario
+    events:
+      - http:
+          path: login-usuario
+          method: post
+
 # -*-*-*-* Persona *-*-*-*-
 
-functions:
   obtenerPersona:
     handler: src/handlers/persona-handler.obtenerTodo
     events:

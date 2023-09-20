@@ -37,11 +37,17 @@ const obtenerUno = async (id) => {
 const crear = async (data) => {
   const tr = await db.transaction();
   try {
+
     const result = await tr(nombreTabla1).insert(data);
+
     await tr.commit();
-    return await db(nombreTabla1).select()
-    .join(nombreTabla2, `${nombreTabla1}.CodPersona`, '=', `${nombreTabla2}.CodPersona`)
-    .where('CodEmpleado', result[0]).first();
+   
+    return db(nombreTabla1).select()
+      .join({ p: nombreTabla2}, `${nombreTabla1}.CodPersona`, '=', `p.CodPersona`)
+      .join({ c: nombreTabla3}, `${nombreTabla1}.CodCargo`, '=', `c.CodCargo`)
+      .join({ r: nombreTabla4}, `${nombreTabla1}.CodRol`, '=', `r.CodRol`)
+      .where('CodEmpleado', result[0]).first();
+
   } catch (e) {
     await tr.rollback();
     throw e;
@@ -51,11 +57,18 @@ const crear = async (data) => {
 const actualizar = async (data, id) => {
   const tr = await db.transaction();
   try {
+
     await tr(nombreTabla1).where('CodEmpleado', id).update(data);
+
     await tr.commit();
-    return await db.select()
-    .join(nombreTabla2, `${nombreTabla1}.CodPersona`, '=', `${nombreTabla2}.CodPersona`)
-    .where('CodEmpleado', id).table(nombreTabla1).first()
+
+    return await db(nombreTabla1).select()
+    .join({ p: nombreTabla2}, `${nombreTabla1}.CodPersona`, '=', `p.CodPersona`)
+    .join({ c: nombreTabla3}, `${nombreTabla1}.CodCargo`, '=', `c.CodCargo`)
+    .join({ r: nombreTabla4}, `${nombreTabla1}.CodRol`, '=', `r.CodRol`)
+    .where('CodEmpleado', id)
+    .first();
+
   } catch (e) {
     await tr.rollback();
     throw e;

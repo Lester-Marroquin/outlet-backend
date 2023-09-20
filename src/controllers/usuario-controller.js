@@ -1,7 +1,7 @@
 const { responseSuccess, responseFail } = require('../helpers/response')
 const { validar } = require('../schemas/usuario-schema');
-const controller = require('../controllers/persona-controller');
 const query  = require('../querys/usuario-query');
+const bcrypt = require('bcrypt');
 const { StatusCodes } = require('http-status-codes');
 
 const obtenerTodo = async () => {
@@ -31,29 +31,28 @@ const obtenerUno = async (id) => {
 const crear = async (body) => {
   try {
        
-    const dataPersona = body.Persona;
-    const dataUsuario = body.Usuario;
-
-    const validacion = validar(dataUsuario)
+  
+    const validacion = validar(body)
     
     if (validacion) {
-      return responseFail({data: validacion.details[0].message, message: 'Los datos no son validos para crear el usuario', statusCode: StatusCodes.BAD_REQUEST})
+      return responseFail({data: validacion.details[0].message, message: 'Los datos no son validos para crear un Usuario', statusCode: StatusCodes.BAD_REQUEST})
     }
 
-    const resultPersona = await controller.crear(dataPersona);
+    //Encriptación de ClaveUsuario
+    //SALTROUND = variable de entorno   
+    const saltRounds = parseInt(process.env.SALTROUND);
+    body.ClaveUsuario = bcrypt.hashSync(body.ClaveUsuario, saltRounds);
 
-    if (resultPersona.data == null) {
-      return responseFail({message: resultPersona.message, statusCode: StatusCodes.CONFLICT})
-    }
-
-    dataUsuario.CodPersona = resultPersona.data.CodPersona;
-
-    const resultUsuario = await query.crear(dataUsuario);
-    if (!resultUsuario) {
+    const result = await query.crear(body);
+    
+    if (!result) {
       return responseFail({message: 'Error en la inserción de datos', statusCode: StatusCodes.NOT_FOUND})
     }
 
-    return responseSuccess({data: resultUsuario, message: 'Usuario creado exitosamente'});
+    //Destructruación de Usuario
+    const { ClaveUsuario, ...dataResult} = result
+
+    return responseSuccess({data: dataResult, message: 'Usuario creado exitosamente'});
   
   } catch (e) {
     return responseFail({message: e, statusCode: StatusCodes.UNPROCESSABLE_ENTITY})
@@ -62,29 +61,27 @@ const crear = async (body) => {
 
 const actualizar = async (body, id) => {
   try {
-    const dataPersona = body.Persona;
-    const dataUsuario = body.Usuario;
 
-    const validacion = validar(dataUsuario)
-    
+    const validacion = validar(body)
+
     if (validacion) {
       return responseFail({data: validacion.details[0].message, message: 'Los datos no son validos para actualizar al Usuario', statusCode: StatusCodes.BAD_REQUEST})
     }
 
-    const resultPersona = await controller.actualizar(dataPersona, dataPersona.CodPersona);
-    
-    if (resultPersona.data == null) {
-      return responseFail({message: resultPersona.message, statusCode: StatusCodes.CONFLICT})    
-    }
+    //Encriptación de ClaveUsuario
+    //SALTROUND = variable de entorno   
+    const saltRounds = parseInt(process.env.SALTROUND);
+    body.ClaveUsuario = bcrypt.hashSync(body.ClaveUsuario, saltRounds);
 
-    dataUsuario.CodPersona = resultPersona.data.CodPersona;
-
-    const resultUsuario = await query.actualizar(dataUsuario, id);
-    if (!resultUsuario) {
-      
+    const result = await query.actualizar(body, id);
+    if (!result) {
       return responseFail({message: 'Error en la inserción de datos', statusCode: StatusCodes.NOT_FOUND})
     }
-    return responseSuccess({data: resultUsuario, message: 'Usuario actualizado exitosamente'});
+
+    //Destructruación de Usuario
+    const { ClaveUsuario, ...dataResult} = result
+
+    return responseSuccess({data: dataResult, message: 'Usuario actualizado exitosamente'});
   
   } catch (e) {
     return responseFail({message: e, statusCode: StatusCodes.UNPROCESSABLE_ENTITY})

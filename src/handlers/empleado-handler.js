@@ -1,7 +1,7 @@
 'use strict';
 const { parseResponse } = require('../helpers/response')
 const controller = require('../controllers/empleado-controller');
-// const { validarJWT } = require('../helpers/validar-jwt')
+const { validarJWT } = require('../helpers/validar-jwt')
 
 const obtenerTodo = async () => {
   // const unauthResponse = await validarJWT(event);
