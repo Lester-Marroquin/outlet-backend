@@ -1,6 +1,6 @@
 'use strict';
 const { parseResponse } = require('../helpers/response')
-const controller = require('../controllers/cargo-controller');
+const controller = require('../controllers/orden-servicio-controller');
 const { validarJWT } = require('../helpers/validar-jwt')
 
 const obtenerTodo = async (event) => {

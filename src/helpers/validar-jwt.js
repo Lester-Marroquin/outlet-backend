@@ -1,29 +1,29 @@
 const jwt = require("jsonwebtoken");
-const { responseSuccess, responseFail } = require('../helpers/response')
+const { responseSuccess, responseFail } = require("../helpers/response");
 const { StatusCodes } = require("http-status-codes");
 // const usuarioUseCase = require("../usecases/usuarios-usecase");
 
 const validarJWT = async (event) => {
-  let response = null;
-  const autorizar = event.headers["authorization"];
-  if (!autorizar) {
-    return responseFail(
-      { message: "No hay token en la petición" },
-      StatusCodes.UNAUTHORIZED
-    );
-  }
-
-  const token = autorizar.split("Bearer ")[1];
-  if (!token) {
-    response = responseFail(
-      { message: "No hay token en la petición" },
-      StatusCodes.UNAUTHORIZED
-    );
-    return response;
-  }
-
   try {
-    const { UsuarioEmpleado } = jwt.verify(token, process.env.KEYSECRET);
+    const autorizar = event.headers["Authorization"];
+    if (!autorizar) {
+      return responseFail({
+        message: "Error en los Headers de la petición",
+        statusCode: StatusCodes.UNAUTHORIZED,
+      });
+    }
+
+    const token = autorizar.split("Bearer ")[1];
+
+    if (!token) {
+      return responseFail({
+        message: "No hay token en la petición",
+        statusCode: StatusCodes.UNAUTHORIZED,
+      });
+    }
+
+    const { id } = jwt.verify(token, process.env.KEYSECRET);
+    console.log('Lo que tiene ID:', id);
     // leer el usuario que corresponde al uid
 
     // Comentar desde acá
@@ -36,12 +36,12 @@ const validarJWT = async (event) => {
     // }
 
     ///Validar si el usuario cuenta con el rol para consumir el servicio
-  } catch (error) {
-    console.error(error);
-    return responseFail(
-      { message: "Token no válido" },
-      StatusCodes.UNAUTHORIZED
-    );
+  } catch (e) {
+    return responseFail({
+      data: e,
+      message: "Token no valido",
+      statusCode: StatusCodes.UNAUTHORIZED,
+    });
   }
 
 };

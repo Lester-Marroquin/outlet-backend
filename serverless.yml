@@ -33,6 +33,11 @@ custom:
     automatic: true
     number: 2
 
+cors:
+  origin: '*'
+  headers: '*'
+  methods: '*'
+
 functions:
 # -*-*-*-* Loing *-*-*-*-
 
