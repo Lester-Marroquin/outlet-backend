@@ -5,7 +5,7 @@ const { generarJWT } = require("../helpers/generar-jwt");
 const bcrypt = require('bcrypt');
 
 const loginEmpleado = async (body) => {
-
+  
   const usuarioEmpleado = body.UsuarioEmpleado;
 
   const resultEmpleado = await query.obtenerEmpleado(usuarioEmpleado);

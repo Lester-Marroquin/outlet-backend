@@ -30,7 +30,6 @@ const obtenerUno = async (id) => {
 
 const crear = async (body) => {
   try {
-       
   
     const validacion = validar(body)
     
@@ -44,7 +43,7 @@ const crear = async (body) => {
     body.ClaveUsuario = bcrypt.hashSync(body.ClaveUsuario, saltRounds);
 
     const result = await query.crear(body);
-    
+
     if (!result) {
       return responseFail({message: 'Error en la inserción de datos', statusCode: StatusCodes.NOT_FOUND})
     }

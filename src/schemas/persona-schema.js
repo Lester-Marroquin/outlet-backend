@@ -31,7 +31,7 @@ const schema = Joi.object({
     NumeroIdentificacion: Joi.string().max(20).required(),
     Telefono: Joi.string().min(8).max(10).required(),
     Correo: Joi.string().email().max(100).required(),
-    Direccion: Joi.string().max(500),
+    Direccion: Joi.string().max(500).required(),
     CodMunicipio: Joi.number().integer().required()
 })  
 

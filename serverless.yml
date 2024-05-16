@@ -432,6 +432,13 @@ functions:
           path: producto/{id}
           method: get
 
+  obtener-ProductoPorCategoria:
+    handler: src/handlers/producto-handler.obtenerPorCategoria
+    events:
+      - http:
+          path: productoPorCategoria/{id}
+          method: get
+
   crear-Producto:
     handler: src/handlers/producto-handler.crear
     events:

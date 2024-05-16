@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { responseSuccess, responseFail } = require("../helpers/response");
+const { responseFail } = require("../helpers/response");
 const { StatusCodes } = require("http-status-codes");
 // const usuarioUseCase = require("../usecases/usuarios-usecase");
 
@@ -23,19 +23,7 @@ const validarJWT = async (event) => {
     }
 
     const { id } = jwt.verify(token, process.env.KEYSECRET);
-    console.log('Lo que tiene ID:', id);
-    // leer el usuario que corresponde al uid
-
-    // Comentar desde acá
-    //     const usuario = await usuarioUseCase.findUsuarioActivo(id);
-    // if (!usuario) {
-    //   return responseFail(
-    //     { message: "Token no válido - usuario no existe o está inactivo" },
-    //     StatusCodes.UNAUTHORIZED
-    //   );
-    // }
-
-    ///Validar si el usuario cuenta con el rol para consumir el servicio
+    
   } catch (e) {
     return responseFail({
       data: e,
@@ -43,7 +31,6 @@ const validarJWT = async (event) => {
       statusCode: StatusCodes.UNAUTHORIZED,
     });
   }
-
 };
 
 module.exports = {

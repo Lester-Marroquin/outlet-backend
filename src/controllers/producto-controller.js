@@ -27,6 +27,24 @@ const obtenerUno = async (id) => {
   }
 }
 
+const obtenerPorCategoria = async (id) => {
+  try {
+    const result = await query.obtenerPorCategoria(id);
+    if (!result) {
+      return responseFail({
+        message: "No se encontraron datos",
+        statusCode: StatusCodes.NOT_FOUND,
+      });
+    }
+    return responseSuccess({ data: result });
+  } catch (e) {
+    return responseFail({
+      message: e,
+      statusCode: StatusCodes.UNPROCESSABLE_ENTITY,
+    });
+  }
+};  
+
 const crear = async (body) => {
   try {
        
@@ -88,6 +106,7 @@ const actualizar = async (body, id) => {
 module.exports = {
   obtenerTodo,
   obtenerUno,
+  obtenerPorCategoria,
   crear,
   actualizar
 };

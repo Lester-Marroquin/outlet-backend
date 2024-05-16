@@ -25,6 +25,7 @@ const obtenerUno = async (id) => {
 };
 
 const crear = async (data) => {
+
   const tr = await db.transaction();
   try {
     const result = await tr(nombreTabla1).insert(data);

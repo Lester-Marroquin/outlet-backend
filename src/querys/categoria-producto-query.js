@@ -1,4 +1,5 @@
 const { db } = require('../config/connection');
+const fs = require("fs");
 
 const nombreTabla = 'CategoriaProducto';
 
@@ -34,6 +35,13 @@ const consultarExiste = async(data) => {
 const crear = async (data) => {
   const tr = await db.transaction();
   try {
+
+    //Lee el archivo de imagen y se convierte a una cadena de texto en formato Base64
+    const imagenBase64 = fs.readFileSync(data.Imagen, 'base64');
+
+    //Se agrega la imagen en formato Base64 a la data
+    data.Imagen = imagenBase64;
+
     const result = await tr(nombreTabla).insert(data);
     await tr.commit();
     return await db(nombreTabla).where('CodCategoriaProducto', result[0]).first();

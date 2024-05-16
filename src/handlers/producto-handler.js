@@ -17,6 +17,13 @@ const obtenerUno = async (event) => {
     return parseResponse(response);
 };
 
+const obtenerPorCategoria = async (event) => {
+  // const unauthResponse = await validarJWT(event);
+  // if (unauthResponse) return parseResponse(unauthResponse);
+  const response = await controller.obtenerPorCategoria(event.pathParameters.id);
+  return parseResponse(response);
+};
+
 const crear = async (event) => {
   // const unauthResponse = await validarJWT(event);
   // if (unauthResponse) return parseResponse(unauthResponse);
@@ -35,6 +42,7 @@ const actualizar = async (event) => {
 module.exports = {
   obtenerTodo,
   obtenerUno,
+  obtenerPorCategoria,
   crear,
   actualizar
 };

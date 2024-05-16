@@ -1,4 +1,5 @@
 const { db } = require('../config/connection');
+const fs = require("fs");
 
 const nombreTabla1 = 'Producto';
 const nombreTabla2 = 'ImagenProducto';
@@ -7,7 +8,7 @@ const nombreTabla4 = 'CategoriaProducto';
 
 const obtenerTodo = async () => {
   try {
-    await db(nombreTabla1)
+    return await db(nombreTabla1)
     .select()
     .join(nombreTabla3, `${nombreTabla1}.CodMarcaProducto`, '=', `${nombreTabla3}.CodMarcaProducto`)
     .join(nombreTabla4, `${nombreTabla1}.CodCategoriaProducto`, '=', `${nombreTabla4}.CodCategoriaProducto`)
@@ -30,6 +31,29 @@ const obtenerUno = async (id) => {
     throw e;
   }
 };
+
+const obtenerPorCategoria = async (CodCategoriaProducto) => {
+  try {
+    return await db(nombreTabla1)
+      .select()
+      .join(
+        nombreTabla3,
+        `${nombreTabla1}.CodMarcaProducto`,
+        "=",
+        `${nombreTabla3}.CodMarcaProducto`
+      )
+      .join(
+        nombreTabla4,
+        `${nombreTabla1}.CodCategoriaProducto`,
+        "=",
+        `${nombreTabla4}.CodCategoriaProducto`
+      )
+      .where(`${nombreTabla1}.CodCategoriaProducto`, CodCategoriaProducto);
+  } catch (e) {
+    throw e;
+  }
+};
+
 
 const consultarExiste = async(data) => {
   try {
@@ -71,6 +95,7 @@ const actualizar = async (data, id) => {
 module.exports = {
   obtenerTodo,
   obtenerUno,
+  obtenerPorCategoria,
   consultarExiste,
   crear,
   actualizar
