@@ -11,6 +11,7 @@ const obtenerTodo = async () => {
     .join(nombreTabla2, `${nombreTabla1}.CodTipoIdentificacion`, '=', `${nombreTabla2}.CodTipoIdentificacion`)
     .join(nombreTabla3, `${nombreTabla1}.CodMunicipio`, '=', `${nombreTabla3}.CodMunicipio`)
     .join(nombreTabla4, `${nombreTabla3}.CodDepartamento`, '=', `${nombreTabla4}.CodDepartamento`)
+    .orderBy(`${nombreTabla1}.CodProducto`, 'asc');
   } catch (e) {
     throw e;
   }

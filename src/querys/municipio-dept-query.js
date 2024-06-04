@@ -5,7 +5,8 @@ const nombreTabla2 = 'Municipio';
 
 const obtenerDepartamentos = async () => {
   try {
-    return await db.select().table(nombreTabla);
+    return await db.select().table(nombreTabla)
+    .orderBy(`${nombreTabla1}.CodProducto`, 'asc');
   } catch (e) {
     throw e;
   }

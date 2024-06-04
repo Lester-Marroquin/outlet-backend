@@ -5,7 +5,10 @@ const nombreTabla2 = 'DetalleRol';
 
 const obtenerTodo = async () => {
   try {
-    return await db.select().from(nombreTabla1).leftJoin(nombreTabla2, 'Rol.CodRol', 'DetalleRol.CodRol')
+    return await db.select()
+    .from(nombreTabla1)
+    .leftJoin(nombreTabla2, 'Rol.CodRol', 'DetalleRol.CodRol')
+    .orderBy(`${nombreTabla1}.CodProducto`, 'asc')
   } catch (e) {
     throw e;
   }
