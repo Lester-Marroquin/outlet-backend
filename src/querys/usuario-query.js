@@ -8,8 +8,7 @@ const nombreTabla2 = 'Persona';
 const obtenerTodo = async () => {
   try {
     return await db(nombreTabla1).select()
-    .join(nombreTabla2, `${nombreTabla1}.CodPersona`, '=', `${nombreTabla2}.CodPersona`)
-    .orderBy(`${nombreTabla1}.CodProducto`, 'asc');
+    .join(nombreTabla2, `${nombreTabla1}.CodPersona`, '=', `${nombreTabla2}.CodPersona`);
   } catch (e) {
     throw e;
   }

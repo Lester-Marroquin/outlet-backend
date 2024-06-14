@@ -11,7 +11,6 @@ const obtenerTodo = async () => {
     return await db(nombreTabla1).select()
     .join(nombreTabla2, `${nombreTabla1}.CodPersona`, '=', `${nombreTabla2}.CodPersona`)
     .join(nombreTabla3, `${nombreTabla1}.CodCargo`, '=', `${nombreTabla3}.CodCargo`)
-    .orderBy(`${nombreTabla1}.CodProducto`, 'asc');
   } catch (e) {
     throw e;
   }

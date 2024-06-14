@@ -4,8 +4,7 @@ const nombreTabla = 'ImagenProducto';
 
 const obtenerTodo = async () => {
   try {
-    return await db.select().table(nombreTabla)
-    .orderBy(`${nombreTabla1}.CodProducto`, 'asc');
+    return await db.select().table(nombreTabla);
   } catch (e) {
     throw e;
   }

@@ -5,8 +5,7 @@ const nombreTabla1 = 'OrdenServicio';
 
 const obtenerTodo = async () => {
   try {
-    return await db.select().table(nombreTabla1)
-    .orderBy(`${nombreTabla1}.CodProducto`, 'asc');
+    return await db.select().table(nombreTabla1);
   } catch (e) {
     throw e;  
   }
